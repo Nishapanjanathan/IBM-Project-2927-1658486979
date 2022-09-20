@@ -1,0 +1,48 @@
+
+int LightSensorVal = 0;
+
+int PIRSensorVal = 0;
+
+int RelayOutputVal = 0;
+
+int sensorPin = 0;
+
+void setup()
+{
+  pinMode(A0, INPUT);
+  pinMode(2, INPUT);
+  pinMode(8, INPUT);
+  pinMode(8, OUTPUT);
+  pinMode(0, OUTPUT);
+  pinMode(A0,OUTPUT);
+  Serial.begin(9600);
+
+}
+
+void loop()
+{
+  LightSensorVal = analogRead(A0);
+  PIRSensorVal = digitalRead(2);
+  RelayOutputVal = digitalRead(8);
+  int reading=analogRead(sensorPin);
+  float voltage=reading*4.68;
+  voltage/=1024.0;
+  float temperatureC=(voltage-0.5)*100;
+  Serial.print(temperatureC);
+  Serial.println("Degrees C");
+  delay(1000);
+  if (LightSensorVal < 600) {
+    if (PIRSensorVal == HIGH) {
+      digitalWrite(8, HIGH);
+      delay(5000);
+      // Wait for 5000 millisecond(s)
+      digitalWrite(0, LOW);
+    } else {
+      delay(1000); // Wait for 1000 millisecond(s)
+    }
+  } else {
+    digitalWrite(8, LOW);
+    Serial.println(LightSensorVal);
+    delay(300); // Wait for 300 millisecond(s)
+  }
+}
